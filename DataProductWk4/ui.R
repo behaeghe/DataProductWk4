@@ -8,19 +8,28 @@
 #
 
 library(shiny)
-
+library(wordcloud)
+# TODO:
+# App Flow:     select an address from address list
+#               locate address (call getMyaddress)
+#               Calculate TDM for the speific address
+#               Update the wordcloud
+# UI:  sidebar allow for number of address to compare
+#      Create as many tag clouds
+#      each tag cloud has a drop down to select the address
+#      Minimal frequency should be set ?
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel(""),
+  titlePanel("Comparing Inaugural Addresses"),
   
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
           sidebarPanel(
                   selectInput("selection", "Choose a president of the United States:",
-                              choices = prez),
-                  actionButton("update", "Change"),
+                              choices = inaugAddresses),
+                  #actionButton("update", "Change"),
                   hr(),
                   sliderInput("max",
                               "Maximum Number of Words:",
