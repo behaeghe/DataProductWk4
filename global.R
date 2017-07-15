@@ -1,1 +1,0 @@
-prez <<- c("Bush","Obama")
