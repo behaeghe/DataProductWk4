@@ -7,6 +7,7 @@
 library(quanteda) #where we get the inauguration addresses
 library(tm) #NLP
 library(magrittr) #so code look beautiful
+<<<<<<< HEAD
 #
 #' Prepare data (a quanteda large corpus) for word cloud
 #'
@@ -17,6 +18,9 @@ library(magrittr) #so code look beautiful
 #' @export
 #'
 #' @examples
+=======
+
+>>>>>>> d44057df6dc5a2c85e7968dad48f272325a96c9b
 loadInaugData <- function(inaug){ #Inaug is a tm::Corpus
 #Getting our data
 inaugCorp <- Corpus(VectorSource(inaug$documents$texts))
@@ -28,6 +32,7 @@ inaugCorp <- inaugCorp %>%
         tm_map(removeWords,stopwords("SMART"))
 inaugCorp
 }
+<<<<<<< HEAD
 #' Prepare a list of inaugural addresses by year and president
 #'
 #' @param inaug 
@@ -70,4 +75,11 @@ getMyAddress <- function(address,addressList,inaug){
 }
 
 inaugAddresses <<- listMyAddresses(data_corpus_inaugural)
+=======
+getMyPresidents <- function(inaug){
+        myPrez <- paste0(inaug$documents$Year,"-",inaug$documents$President)
+        myPrez
+}
+prez <<- getMyPresidents(data_corpus_inaugural)
+>>>>>>> d44057df6dc5a2c85e7968dad48f272325a96c9b
 inaugCorp <<- loadInaugData(data_corpus_inaugural)

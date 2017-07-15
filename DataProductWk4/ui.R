@@ -9,6 +9,7 @@
 
 library(shiny)
 library(wordcloud)
+<<<<<<< HEAD
 # TODO:
 # App Flow:     select an address from address list
 #               locate address (call getMyaddress)
@@ -18,6 +19,9 @@ library(wordcloud)
 #      Create as many tag clouds
 #      each tag cloud has a drop down to select the address
 #      Minimal frequency should be set ?
+=======
+
+>>>>>>> d44057df6dc5a2c85e7968dad48f272325a96c9b
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
   
