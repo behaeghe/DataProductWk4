@@ -1,0 +1,88 @@
+---
+title: "R Notebook"
+output:
+  html_document: default
+  html_notebook: default
+---
+# Exploration work for wk 4 of "Building Data Products" on Cloudera  
+
+## Objective  
+
+I want to build a Shiny app that displays word clouds from presidential addresses
+
+## Part 1: Exploration and feasibility
+
+### Getting some data  
+
+A google serach revealed that the [Guntenberg project](www.gutenberg.org) offered a the full text 
+of inaugural addresses from G. Washington to G.W. Bush. I decided to use this text. The text can be found [here](http://www.gutenberg.org/cache/epub/925/pg925.txt). After looking for tokenizing the text by president and years, I foudn out that the author of the package had kindly do the work... so I will use this instead. 
+```{r}
+library(quanteda)
+inaug <- data_corpus_inaugural
+```
+### What would a data science project be without some wrangling, right ?  
+Let's attempt to create a first word cloud on Washington second address...
+First thing first a bit of data clean-up is in order:
+
+```{r}
+library(tm)
+library(magrittr)
+library(SnowballC)
+#let's make a corpus, a collection of our inuagural texts
+inaugCorp <- Corpus(VectorSource(inaug$documents$texts))
+#Let's clean up a bit
+inaugCorp <- inaugCorp %>% 
+                tm_map(content_transformer(tolower)) %>%
+                tm_map(removePunctuation) %>%
+                tm_map(removeNumbers) %>% 
+                tm_map(removeWords,stopwords("SMART"))
+#Some stemming (reduce world to their stem)
+#inaugCorp <- inaugCorp %>%
+#        tm_map(stemDocument) #Stemming is provided by the snowballC library
+```
+
+Now that we have tidied up our texts, we need to create a word could. To do this, we need to calculate the frequency of each terms in each document. The lm library come with a handy function called ```TermDocumentMatrix``` that will create the frequency matrix of document terms. Let's try this.
+````{r}
+        library(wordcloud)
+        # That's for all inaugural addresses, if you want the TDM for a specific one, just get a specicif one from the corpus 
+        inaugTDM <- TermDocumentMatrix(inaugCorp,control =list(minWordLength = 1))
+        #make it a Matrix  so it is somewhat humanely readable and sort...
+        inaugTermsMat <- as.matrix(inaugTDM)
+        #sort so it is easier for the world cloud
+        inaugTermsMat <- sort(rowSums(inaugTermsMat),decreasing=TRUE)
+        wordcloud(names(inaugTermsMat),inaugTermsMat,max.words = 50,colors=brewer.pal(8,"Blues"))
+```
+
+Not bad for a couple hours of work. So a few things to note, since we stemmed the words it looks a bit weird (incomplete words, but get a good idea of the themes)
+
+### Part 1: Conclusion
+
+We sourced the data we were looking for and we were able to create a word cloud from all inaugural addresses since George Washington. Pretty cool !
+
+## Prepping for Shiny
+
+## Inputs
+
+We will give the option for users to pick all presidents, a specific inaugural address, if multiple presidents then offer the year or a combination of all their inaugurations.
+
+```{r}
+#let's get a list of presidents:
+prez <- paste0(inaug$documents$Year,"-",inaug$documents$President)
+#Locate President Obama 2009 inaugural Address
+prezInd <- match("2009-Obama",prez)
+prezCorp <- inaugCorp[prezInd]
+```
+
+So the input will be a drop down with the year and president name, we could get fancy and brea it down by century of example. For now, we will keep it simple. Additionally users can choose the number of words in the tag cloud. I aslo decided not the stem the text.
+
+## Drawing a cloud
+
+We will draw a cloud for president Obama 2009 inaugural address.
+
+```{r}
+        # That's the basis of our function for the shiny app
+        inaugBama <- as.matrix(TermDocumentMatrix(prezCorp,control =list(minWordLength = 1)))
+        inaugBama <- sort(rowSums(inaugBama),decreasing =TRUE)
+        wordcloud(names(inaugBama),inaugBama,max.words = 30,min.freq = 4, colors=brewer.pal(8,"Blues"))
+        
+```
