@@ -9,7 +9,7 @@
 
 library(shiny)
 library(wordcloud)
-<<<<<<< HEAD
+
 # TODO:
 # App Flow:     select an address from address list
 #               locate address (call getMyaddress)
@@ -19,30 +19,24 @@ library(wordcloud)
 #      Create as many tag clouds
 #      each tag cloud has a drop down to select the address
 #      Minimal frequency should be set ?
-=======
+#=======
 
->>>>>>> d44057df6dc5a2c85e7968dad48f272325a96c9b
+
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-  
-  # Application title
-  titlePanel("Comparing Inaugural Addresses"),
-  
-  # Sidebar with a slider input for number of bins 
-  sidebarLayout(
-          sidebarPanel(
-                  selectInput("selection", "Choose a president of the United States:",
-                              choices = inaugAddresses),
-                  #actionButton("update", "Change"),
-                  hr(),
-                  sliderInput("max",
-                              "Maximum Number of Words:",
-                              min = 1,  max = 30,  value = 15)
-          ),
-    
-    # Show a plot of the generated distribution
-    mainPanel(
-       h1("hello")
+        fluidRow(
+                column(5,
+                       textOutput("add1"),
+                       selectInput("add1","Select Inaugural Address",prez),
+                       plotOutput("cloud1")
+                       ),
+                column(2, h4("vs")),
+                column(5,
+                       textOutput("add2"),
+                       selectInput("add2","select Inaugural Address",prez),
+                       plotOutput("cloud2")
+                )
+        )  
     )
   )
-))
+

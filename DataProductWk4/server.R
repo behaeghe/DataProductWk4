@@ -9,9 +9,24 @@
 
 library(shiny)
 source("./global.R")
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-   
- 
-  
-})
+
+shinyServer <- function(input, output) {
+        output$add1 <- renderText(input$add1)
+        output$add2 <- renderText(input$add2)
+                address <- reactive({
+                                        cloudTerms <- isolate(
+                        withProgress({
+                                setProgress(message="Generating Word Cloud...")
+                                AddressesTDM(getMyAddress(input$add1,myPrez,inaugCorp))
+                        }))
+                })
+        output$cloud1 <- renderPlot({
+         myterms <- address()
+         wordcloud(names(myterms),
+                   myterms,
+                   scale(4,0.5), 
+                   min.freq = 4,
+                   max.words =10,
+                   colors=brewer.pal(8,"Blues"))
+        })                    
+}
