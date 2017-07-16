@@ -25,6 +25,11 @@ library(wordcloud)
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
         fluidRow(
+                column(12,
+                       h1("Comparing Inaugural Addresses")
+                        )
+                ),
+        fluidRow(
                 column(5,
                        textOutput("add1"),
                        selectInput("add1","Select Inaugural Address",prez),

@@ -13,20 +13,26 @@ source("./global.R")
 shinyServer <- function(input, output) {
         output$add1 <- renderText(input$add1)
         output$add2 <- renderText(input$add2)
-                address <- reactive({
-                                        cloudTerms <- isolate(
-                        withProgress({
-                                setProgress(message="Generating Word Cloud...")
-                                AddressesTDM(getMyAddress(input$add1,myPrez,inaugCorp))
-                        }))
-                })
+        wordcloud_rep <- repeatable(wordcloud)
         output$cloud1 <- renderPlot({
-         myterms <- address()
-         wordcloud(names(myterms),
-                   myterms,
-                   scale(4,0.5), 
-                   min.freq = 4,
-                   max.words =10,
-                   colors=brewer.pal(8,"Blues"))
-        })                    
+                input$add1
+                myaddr <- input$add1
+                addr <- getMyAddress(myaddr,prez,inaugCorp)
+                TDM <- addressesTDM(addr)
+                wordcloud_rep(names(TDM),
+                          TDM,
+                          min.freq=3,
+                          colors=brewer.pal(8,"Blues"))
+                }) 
+        output$cloud2 <- renderPlot({
+                input$add2
+                myaddr <- input$add2
+                addr <- getMyAddress(myaddr,prez,inaugCorp)
+                TDM <- addressesTDM(addr)
+                wordcloud_rep(names(TDM),
+                          TDM,
+                          min.freq=3,
+                          colors=brewer.pal(8,"Blues"))
+        }) 
+        
 }
