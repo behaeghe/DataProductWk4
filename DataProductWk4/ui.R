@@ -26,22 +26,25 @@ library(wordcloud)
 shinyUI(fluidPage(
         fluidRow(
                 column(12,
-                       h1("Comparing Inaugural Addresses")
+                       h1("Comparing US Presidents Inaugural Addresses",align='center'),
+                       hr()
                         )
                 ),
         fluidRow(
                 column(5,
-                       textOutput("add1"),
                        selectInput("add1","Select Inaugural Address",prez),
                        plotOutput("cloud1")
                        ),
                 column(2, h4("vs")),
                 column(5,
-                       textOutput("add2"),
-                       selectInput("add2","select Inaugural Address",prez),
+                       selectInput("add2","Select Inaugural Address",prez),
                        plotOutput("cloud2")
                 )
-        )  
+        ),
+        fluidRow(
+         hr(),        
+         div(textAlign="center",style="color:#0000FF","This application allows to compare inaugural addresses by US presidents from Washington to Trump using word clouds. Simply pick an inaugural address in each drop box. The cloud tag will update automatically")      
+        )
     )
   )
 
